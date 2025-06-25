@@ -12,7 +12,24 @@ const TeacherDashboard = () => {
   const [expandedSession, setExpandedSession] = useState(null);
   const [manualStudent, setManualStudent] = useState({ name: '', rollNo: '' });
 
+  const [localIP, setLocalIP] = useState('');
+
+
   const token = localStorage.getItem('teacherToken');
+
+  useEffect(() => {
+    const fetchIP = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/utils/my-ip');
+        setLocalIP(res.data.ip);
+      } catch (err) {
+        console.error('Failed to fetch IP:', err);
+      }
+    };
+
+    fetchIP();
+  }, []);
+
 
   useEffect(() => {
     const fetchTeacher = async () => {
@@ -66,6 +83,12 @@ const TeacherDashboard = () => {
     }
 
     try {
+      // Fetch local IP
+      const ipRes = await axios.get('http://localhost:5000/api/utils/my-ip');
+      const ip = ipRes.data.ip;
+      setLocalIP(ip); // ✅ Store it in state
+
+      // Create session
       const res = await axios.post(
         'http://localhost:5000/api/attendance/create',
         { ...form, teacherId: teacher._id },
@@ -78,6 +101,7 @@ const TeacherDashboard = () => {
       alert('Failed to start session.');
     }
   };
+
 
   const handleAddStudent = async () => {
     if (!manualStudent.name || !manualStudent.rollNo) return alert('Enter all fields');
@@ -117,10 +141,10 @@ const TeacherDashboard = () => {
 
       <div className="dashboard-grid">
         <div className="dashboard-card">
-          {sessionId ? (
+          {sessionId && localIP ? (
             <>
               <h3 className="section-title">QR Code - Live Session</h3>
-              <QRCodeCanvas value={`http://192.168.0.4:3000/attendance/${sessionId}`} size={256} />
+              <QRCodeCanvas value={`http://${localIP}:3000/attendance/${sessionId}`} size={256} />
               <button className="end-button" onClick={handleEndSession}>End Attendance</button>
             </>
           ) : (
@@ -133,6 +157,7 @@ const TeacherDashboard = () => {
               <button className="submit-button" onClick={handleCreateSession}>Generate QR</button>
             </>
           )}
+
         </div>
 
         <div className="dashboard-card">

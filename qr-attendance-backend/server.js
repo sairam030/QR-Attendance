@@ -8,12 +8,12 @@ app.use(cors());
 app.use(express.json());
 
 // Connect MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('✅ MongoDB Connected'))
-.catch((err) => console.error('❌ MongoDB Error:', err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('✅ MongoDB Connected');
+    createDefaultAdmin(); // call after successful connection
+  })
+  .catch((err) => console.error('❌ MongoDB Error:', err));
 
 // Routes
 const adminRoutes = require('./routes/admin');
@@ -33,6 +33,9 @@ app.listen(PORT,'0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
 
+const utilityRoutes = require('./routes/utility');
+app.use('/api/utils', utilityRoutes);
+
 
 // server.js or seed.js
 const Admin = require('./models/Admin');
@@ -49,6 +52,4 @@ const createDefaultAdmin = async () => {
   }
 };
 
-
-createDefaultAdmin();
 
