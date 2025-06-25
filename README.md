@@ -117,6 +117,10 @@ qr-attendance-app/
 
 ![Teacher Dashboard](screenshots/teacher-dashboard.png)
 
+#### 🧑‍🏫 Teacher Dashboard
+
+![Teacher Dashboard](screenshots/teacher-dashboard1.png)
+
 #### 📅 Attendance History
 
 ![Attendance History](screenshots/history-table.png)
