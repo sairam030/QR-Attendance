@@ -69,7 +69,7 @@ cd qr-attendance-app
 ```bash
 cd server
 npm install
-npm start
+node server.js
 ```
 
 * Runs on: `http://localhost:5000`
