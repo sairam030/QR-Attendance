@@ -12,7 +12,7 @@ const TeacherLogin = () => {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:5000/api/teachers/login', { email, password });
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('teacherToken', res.data.token);
       localStorage.setItem('teacherName', res.data.teacher.name);
       localStorage.setItem('teacherId', res.data.teacher._id);
       alert('Login successful!');
